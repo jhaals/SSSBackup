@@ -1,0 +1,25 @@
+Install Instruction
+===================
+
+
+Configure Source
+===================
+1.
+Install the SSSBackup.py into your source machine.
+Configure target path and smtp settings(optional) in SSSBackup.py
+
+2.
+Install shared SSH-keys between source - target. (Logon without password)
+Mac Tutorial: http://oreilly.com/pub/h/66
+Test by doing ssh username@youdomain.com, if you logon without password everything is OK!
+
+3.
+Configure a crontab for running script every X
+
+Configure Target
+=================
+1. 
+Install the checksum.py into /bin/ and set execute permissions for any.
+Test it by type checksum <file>, if you get any value in return it's correct.
+
+Done.
