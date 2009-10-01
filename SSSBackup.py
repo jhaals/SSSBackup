@@ -3,6 +3,8 @@ import commands, re, smtplib, time, sys, getopt, tarfile
 from email.MIMEText import MIMEText
 from optparse import OptionParser
 from zlib import adler32 as get_checksum
+import socket
+import os
 
 # Copyright (c) 2009, Johan Haals <johan.haals@gmail.com>
 # All rights reserved.
@@ -29,7 +31,7 @@ SMTP_SERVER_PASSWORD = '' # SMTP password
 
 # DO NOT CHANGE ANYTHING UNDER THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING.
 
-BACKUP_MACHINE = commands.getoutput('hostname') # A name for this machine
+BACKUP_MACHINE = socket.gethostname()
 start_time = time.strftime('%Y-%m-%d %m:%M:%S')
 
 # Arguments/options
@@ -125,7 +127,7 @@ def CheckSum(file):
 if (options.verbose):
     print 'Starting backup %s. Doing remove on existing dmg and starting new.' % start_time
 BACKUP_FILE = '%s%s.tar.bz2' % (BACKUP_TEMP_STORE, BACKUP_NAME)
-commands.getoutput('rm %s' % BACKUP_FILE)
+os.remove(BACKUP_FILE)
 
 # Creates a tar.bz2 archive of selected path
 if options.verbose:
