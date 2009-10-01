@@ -78,30 +78,27 @@ if len(args) == 2:
 
 # Connects to the SMTP server and send success/error email.
 def SendMail(error):
+    SMTP_SERVER_CONNECT = smtplib.SMTP(SMTP_SERVER) # Connect to smtp
+    SMTP_SERVER_CONNECT.login(SMTP_SERVER_USER, SMTP_SERVER_PASSWORD) # Auth to smtp
+
     if not error:
-        SMTP_SERVER_CONNECT = smtplib.SMTP(SMTP_SERVER) # Connect to smtp
-        SMTP_SERVER_CONNECT.login(SMTP_SERVER_USER, SMTP_SERVER_PASSWORD) # Auth to smtp
         message = 'SSSBackup job "%s" on machine %s completed!\n Source Size: %s\n Target Size: %s\n Backup Started: %s\n Backup Ended: %s' % (BACKUP_NAME, BACKUP_MACHINE, source_size.split()[0], target_size.split()[0], start_time, end_time)
-        msg = MIMEText(message)
-        msg['Subject'] = 'SSSbackup job "%s" on machine "%s" completed!' % (BACKUP_NAME, BACKUP_MACHINE)
-        msg['From'] = USER_EMAIL
-        msg['To'] = ADMIN_EMAIL
+        subject = 'SSSbackup job "%s" on machine "%s" completed!' % (BACKUP_NAME, BACKUP_MACHINE)
         if (options.verbose):
             print 'sending success email'
-        SMTP_SERVER_CONNECT.sendmail(ADMIN_EMAIL, ADMIN_EMAIL, msg.as_string())
-        SMTP_SERVER_CONNECT.quit()
     else:
-        SMTP_SERVER_CONNECT = smtplib.SMTP(SMTP_SERVER) # Connect to smtp
-        SMTP_SERVER_CONNECT.login(SMTP_SERVER_USER, SMTP_SERVER_PASSWORD) # Auth to smtp
         message = 'SSSBackup job "%s" on machine %s failed!\n Source Size: %s\n Target Size: %s' % (BACKUP_NAME, BACKUP_MACHINE, source_size.split()[0], target_size.split()[0])
-        msg = MIMEText(message)
-        msg['Subject'] = 'SSSbackup job "%s" on machine "%s" failed!' % (BACKUP_NAME, BACKUP_MACHINE)
-        msg['From'] = USER_EMAIL
-        msg['To'] = ADMIN_EMAIL
+        subject = 'SSSbackup job "%s" on machine "%s" failed!' % (BACKUP_NAME, BACKUP_MACHINE)
         if (options.verbose):
             print 'sending fail email'
-        SMTP_SERVER_CONNECT.sendmail(ADMIN_EMAIL, ADMIN_EMAIL, msg.as_string())
-        SMTP_SERVER_CONNECT.quit()
+
+    msg = MIMEText(message)
+    msg['Subject'] = subject
+    msg['From'] = USER_EMAIL
+    msg['To'] = ADMIN_EMAIL
+
+    SMTP_SERVER_CONNECT.sendmail(ADMIN_EMAIL, ADMIN_EMAIL, msg.as_string())
+    SMTP_SERVER_CONNECT.quit()
 
 # This function returns a checksum of the input file. Used to verify target and source file.
 def CheckSum(file):
