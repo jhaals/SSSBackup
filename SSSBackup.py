@@ -157,8 +157,7 @@ if source_sum == target_sum:
     if options.verbose:
         print 'The checksum of source matches target, backup done!'
     if options.email:
-        Error = False
-        SendMail(Error)
+        SendMail(error=False)
     if options.verbose:
         print 'Completed backup ' + end_time
     if options.remove_temp:
