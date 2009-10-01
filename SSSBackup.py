@@ -3,7 +3,7 @@
 # All rights reserved.
 # SSBackup [Simple Secure System Backup] - Version 1.0
 
-import commands, re, smtplib, time, sys, getopt, tarfile
+import commands, smtplib, time, sys, getopt, tarfile
 from email.MIMEText import MIMEText
 from optparse import OptionParser
 from zlib import adler32
@@ -155,13 +155,14 @@ source_sum = CheckSum(BACKUP_FILE)
 if (options.verbose):
     print 'Still working...'
 target_sum = commands.getoutput('ssh %s@%s checksum %s%s.tar.bz2' % (TARGET_USERNAME, TARGET_IP, TARGET_FOLDER, BACKUP_NAME)) 
+target_sum = int(target_sum)
 
 end_time = time.strftime('%Y-%m-%d %m:%M:%S')
 
 # if checksum of source == checksum of target
-if (re.match(str(target_sum), str(source_sum))):
+if source_sum == target_sum:
     if (options.verbose):
-        print 'The size of source matches target, backup done!'
+        print 'The checksum of source matches target, backup done!'
     if (options.email):
         Error = False
         SendMail(Error)
