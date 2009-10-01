@@ -172,9 +172,7 @@ if (re.match(str(target_sum), str(source_sum))):
         SendMail(Error)
     if (options.verbose):
         print 'Completed backup ' + end_time
-
-# if checksum of source != checksum of target
-if not (re.match(str(target_sum), str(source_sum))):
+else:
     if(options.verbose):
         print 'Error, the size of source does not match the target'
     if(options.verbose and options.email):
