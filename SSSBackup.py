@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # Copyright (c) 2009, Johan Haals <johan.haals@gmail.com>
 # All rights reserved.
-# SSBackup [Simple Secure System Backup] - Version 1.0
+# SSBackup [Simple Secure System Backup] - Version 1.1
 
 import commands, smtplib, time, sys, tarfile
 from email.MIMEText import MIMEText
@@ -33,7 +33,7 @@ start_time = time.strftime('%Y-%m-%d %m:%M:%S')
 
 # Arguments/options
 usage = "usage: %prog [path] [temp store] [options]"
-parser = OptionParser(usage, version="%prog 1.2")
+parser = OptionParser(usage, version="%prog 1.1")
 parser.add_option("--email", "-e", help="Send email to administrator on success/fail", action="store_true")
 parser.add_option("--name", help="Name for this backup, will be displayed in result email")
 parser.add_option("--test-smtp", help="Will send a test mail to the administrator", action="store_true")
