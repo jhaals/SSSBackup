@@ -118,24 +118,24 @@ except:
     sys.exit('Error when creating tar.bz2 archive')
 
 source_size = commands.getoutput('du -sh %s' % BACKUP_FILE) # Checking size of source archive
-if (options.verbose):
+if options.verbose:
     print 'Source archive size: %s' % source_size.split()[0]
 
 
-if (options.verbose):
+if options.verbose:
     print 'Doing remove of old target archive before copy'
 commands.getoutput('ssh %s@%s rm %s%s.tar.bz2' % (TARGET_USERNAME, TARGET_IP, TARGET_FOLDER, BACKUP_NAME)) 
-if (options.verbose):
+if options.verbose:
     print 'Doing copy of archive to remote host. This may take some time...'
 commands.getoutput('scp %s %s@%s:%s' % (BACKUP_FILE, TARGET_USERNAME, TARGET_IP, TARGET_FOLDER))
 
-if (options.verbose):
+if options.verbose:
     print 'Checking size of remote archive'
 target_size = commands.getoutput('ssh %s@%s du -sh %s%s.tar.bz2' % (TARGET_USERNAME, TARGET_IP, TARGET_FOLDER, BACKUP_NAME)) # Checking size of target archive
-if (options.verbose):
+if options.verbose:
     print 'Target archive size: %s' % target_size.split()[0]
 
-if (options.verbose):
+if options.verbose:
     print 'Doing verify of source/target files'
 
 try:
@@ -145,7 +145,7 @@ except IOError:
     SendMail(error=True)
     sys.exit('Unable to open "%s"!' % BACKUP_FILE)
 
-if (options.verbose):
+if options.verbose:
     print 'Still working...'
 target_sum = commands.getoutput('ssh %s@%s checksum %s%s.tar.bz2' % (TARGET_USERNAME, TARGET_IP, TARGET_FOLDER, BACKUP_NAME)) 
 target_sum = int(target_sum)
@@ -154,9 +154,9 @@ end_time = time.strftime('%Y-%m-%d %m:%M:%S')
 
 # if checksum of source == checksum of target
 if source_sum == target_sum:
-    if (options.verbose):
+    if options.verbose:
         print 'The checksum of source matches target, backup done!'
-    if (options.email):
+    if options.email:
         Error = False
         SendMail(Error)
     if options.verbose:
@@ -164,10 +164,9 @@ if source_sum == target_sum:
     if options.remove_temp:
         os.remove(BACKUP_FILE)
 else:
-    if(options.verbose):
+    if options.verbose:
         print 'Error, the size of source does not match the target'
     if(options.verbose and options.email):
         print 'Doing logon to SMTP server' 
-    if(options.email):
-        Error = True
-        SendMail(Error)
+    if options.email:
+        SendMail(error=True)
