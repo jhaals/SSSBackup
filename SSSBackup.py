@@ -35,7 +35,7 @@ parser = OptionParser(usage, version="%prog 1.2")
 parser.add_option("--email", "-e", help="Send email to administrator on success/fail", action="store_true")
 parser.add_option("--name", help="Name for this backup, will be displayed in result email")
 parser.add_option("--test-smtp", help="Will send a test mail to the administrator", action="store_true")
-parser.add_option("--remove-temp", help="Removes temp dmg after successful backup", action="store_false")
+parser.add_option("--remove-temp", help="Removes temp dmg after successful backup", action="store_true")
 parser.add_option("-v", "--verbose", help="Run backup in verbose mode(you see whats going on)", action="store_true")
 (options, args) = parser.parse_args()
 
@@ -116,10 +116,15 @@ def CheckSum(file):
     f.close()
     return current
      
-if (options.verbose):
+if options.verbose:
     print 'Starting backup %s. Doing remove on existing dmg and starting new.' % start_time
+
 BACKUP_FILE = '%s%s.tar.bz2' % (BACKUP_TEMP_STORE, BACKUP_NAME)
-os.remove(BACKUP_FILE)
+
+try:
+    os.remove(BACKUP_FILE)
+except:
+    pass
 
 # Creates a tar.bz2 archive of selected path
 if options.verbose:
@@ -166,8 +171,10 @@ if source_sum == target_sum:
     if (options.email):
         Error = False
         SendMail(Error)
-    if (options.verbose):
+    if options.verbose:
         print 'Completed backup ' + end_time
+    if options.remove_temp:
+        os.remove(BACKUP_FILE)
 else:
     if(options.verbose):
         print 'Error, the size of source does not match the target'
