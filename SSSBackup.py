@@ -3,7 +3,7 @@
 # All rights reserved.
 # SSBackup [Simple Secure System Backup] - Version 1.0
 
-import commands, smtplib, time, sys, getopt, tarfile
+import commands, smtplib, time, sys, tarfile
 from email.MIMEText import MIMEText
 from optparse import OptionParser
 from zlib import adler32
