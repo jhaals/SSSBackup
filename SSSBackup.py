@@ -10,6 +10,8 @@ from zlib import adler32
 import socket
 import os
 
+from checksum import checksum_of_file
+
 # Please set the following parameters.
 
 # TARGET
@@ -94,27 +96,6 @@ def SendMail(error):
 
     SMTP_SERVER_CONNECT.sendmail(ADMIN_EMAIL, ADMIN_EMAIL, msg.as_string())
     SMTP_SERVER_CONNECT.quit()
-
-# This function returns a checksum of the input file. Used to verify target and source file.
-def CheckSum(file):
-    CHUNK_SIZE = 1024
-    try:
-        f = open(file, 'rb')
-    except IOError:
-        if(options.email):
-            Error = True
-            SendMail(Error)
-        sys.exit('Unable to open %s' % file)
-    current = 0
-
-    while True:
-        buffer = f.read(CHUNK_SIZE)
-        if not buffer:
-            break
-
-        current = adler32(buffer, current)
-    f.close()
-    return current
      
 if options.verbose:
     print 'Starting backup %s. Doing remove on existing dmg and starting new.' % start_time
@@ -156,7 +137,14 @@ if (options.verbose):
 
 if (options.verbose):
     print 'Doing verify of source/target files'
-source_sum = CheckSum(BACKUP_FILE)
+
+try:
+    source_sum = checksum_of_file(BACKUP_FILE)
+except IOError:
+    # Couldn't open the specified file
+    SendMail(error=True)
+    sys.exit('Unable to open "%s"!' % BACKUP_FILE)
+
 if (options.verbose):
     print 'Still working...'
 target_sum = commands.getoutput('ssh %s@%s checksum %s%s.tar.bz2' % (TARGET_USERNAME, TARGET_IP, TARGET_FOLDER, BACKUP_NAME)) 

@@ -1,20 +1,28 @@
 #!/usr/bin/env python
-import sys
-from zlib import adler32 as get_checksum
-CHUNK_SIZE = 1024
-try:
-     file = open(sys.argv[1], 'rb')
-except:
-     sys.exit('I/O Error')
-current = 0
+from zlib import adler32
 
-while True:
-    buffer = file.read(CHUNK_SIZE)
+def checksum_of_file(path, chunk_size=1024):
+    file = open(path, 'rb')
+    current = 0
 
-    if not buffer:
-        break
+    while True:
+        buffer = file.read(chunk_size)
 
-    current = get_checksum(buffer, current)
+        if not buffer:
+            break
 
-print current
-file.close()
+        current = adler32(buffer, current)
+
+    file.close()
+
+    return current
+
+if __name__ == '__main__':
+    try:
+        print checksum_of_file(sys.argv[1])
+    except IndexError:
+        # Wrong number of arguments
+        pass
+    except:
+        # Other error
+        pass
