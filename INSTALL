@@ -1,11 +1,13 @@
 Install Instruction
 ===================
-
+This may take up to five minutes!
 
 Configure Source
 ===================
+
 1.
 Install the SSSBackup.py into your source machine.
+Install checksum.py into the same directory as SSSBackup.py
 Configure target path and smtp settings(optional) in SSSBackup.py
 
 2.
@@ -14,12 +16,12 @@ Mac Tutorial: http://oreilly.com/pub/h/66
 Test by doing ssh username@youdomain.com, if you logon without password everything is OK!
 
 3.
-Configure a crontab for running script every X
+Configure a crontab for running script every X hour.
 
 Configure Target
 =================
-1. 
-Install the checksum.py into /bin/ and set execute permissions for any.
+
+Install a copy of checksum.py into /bin/ and set execute permissions for all users.
 Test it by type checksum <file>, if you get any value in return it's correct.
 
 Done.
