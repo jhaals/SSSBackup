@@ -6,7 +6,7 @@
 import commands, re, smtplib, time, sys, getopt, tarfile
 from email.MIMEText import MIMEText
 from optparse import OptionParser
-from zlib import adler32 as get_checksum
+from zlib import adler32
 import socket
 import os
 
@@ -112,7 +112,7 @@ def CheckSum(file):
         if not buffer:
             break
 
-        current = get_checksum(buffer, current)
+        current = adler32(buffer, current)
     f.close()
     return current
      
