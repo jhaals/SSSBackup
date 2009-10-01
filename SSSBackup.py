@@ -1,15 +1,14 @@
 #!/usr/bin/python
+# Copyright (c) 2009, Johan Haals <johan.haals@gmail.com>
+# All rights reserved.
+# SSBackup [Simple Secure System Backup] - Version 1.0
+
 import commands, re, smtplib, time, sys, getopt, tarfile
 from email.MIMEText import MIMEText
 from optparse import OptionParser
 from zlib import adler32 as get_checksum
 import socket
 import os
-
-# Copyright (c) 2009, Johan Haals <johan.haals@gmail.com>
-# All rights reserved.
-# SSBackup [Simple Secure System Backup] - Version 1.0
-
 
 # Please set the following parameters.
 
@@ -18,16 +17,12 @@ TARGET_IP = '' # Where to connect? Enter IP or DNS for the target
 TARGET_FOLDER = '' # Target folder (where backup is stored) 
 TARGET_USERNAME = '' # Username on remote server
 
-
 # EMAIL settings
 USER_EMAIL = '' # The email address for the user on the smtp server
 ADMIN_EMAIL = '' # You're email address!
 SMTP_SERVER = '' # mydomain.com:port
 SMTP_SERVER_USER = '' # SMTP username
 SMTP_SERVER_PASSWORD = '' # SMTP password
-
-# Lock N load!
-
 
 # DO NOT CHANGE ANYTHING UNDER THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING.
 
