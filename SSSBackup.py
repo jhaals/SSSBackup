@@ -44,13 +44,17 @@ parser.add_option("-v", "--verbose", help="Run backup in verbose mode(you see wh
 
 # Testing the SMTP if argument --test-smtp is used. 
 if options.test_smtp:
-    print 'Authenticating to SMTP server.'
-    print "If you dont recive any email from SSSBackup, please verify you're smtp settings"
+    print 'Testing SMTP configuration. If you dont recive any email from SSSBackup, please verify SMTP configuration'
     SMTP_SERVER_CONNECT = smtplib.SMTP(SMTP_SERVER) # Connect to smtp
-    SMTP_SERVER_CONNECT.login(SMTP_SERVER_USER, SMTP_SERVER_PASSWORD) # Auth to smtp
+    try:
+        SMTP_SERVER_CONNECT.login(SMTP_SERVER_USER, SMTP_SERVER_PASSWORD) # Auth to smtp
+    except smtplib.SMTPHeloError:
+        sys.exit('The server didnt reply properly to the HELO greeting.')
+    except smtplib.SMTPAuthenticationError:
+        sys.exit('The SMTP server didnt accept the username/password combination.')
     message = 'SSSBackup can send messages with this configuration!'
     msg = MIMEText(message)
-    msg['Subject'] = 'Hello SSSbackup!'
+    msg['Subject'] = 'Hello from SSSbackup!'
     msg['From'] = USER_EMAIL
     msg['To'] = ADMIN_EMAIL
     SMTP_SERVER_CONNECT.sendmail(ADMIN_EMAIL, ADMIN_EMAIL, msg.as_string())
