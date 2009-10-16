@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from zlib import adler32
-
+import sys
 def checksum_of_file(path, chunk_size=1024):
     file = open(path, 'rb')
     current = 0
