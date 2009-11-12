@@ -20,9 +20,9 @@ def checksum_of_file(path, chunk_size=1024):
 if __name__ == '__main__':
     try:
         print checksum_of_file(sys.argv[1])
-    except IndexError:
-        # Wrong number of arguments
-        pass
+    except IndexError, e:
+        print 'Error: %s' % e
+    except IOError, e:
+        print 'Error: %s' % e
     except:
-        # Other error
-        pass
+        print 'Error: Other error'
