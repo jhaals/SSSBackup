@@ -24,4 +24,4 @@ Configure Target
 Install a copy of checksum.py into /bin/ and set execute permissions for all users.
 Test it by type checksum <file>, if you get any value in return it's correct.
 
-Done.
+Done!
